@@ -11,12 +11,27 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List<String> todoList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   void addTodo({required String todoText}) {
     setState(() {
       todoList.insert(0, todoText);
     });
     writeLocalData();
     Navigator.pop(context);
+  }
+
+  void loadData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      todoList = prefs.getStringList('todoList') ?? [];
+    });
+    print(todoList);
   }
 
   void writeLocalData() async {
